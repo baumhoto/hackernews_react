@@ -170,7 +170,21 @@ class App extends Component {
   }
 }
 
-const Search = ({ value, onChange, onSubmit, children }) => {
+class Search extends Component {
+  componentDidMount() {
+    if (this.input) {
+      this.input.focus();
+    }
+  }
+
+  render() {
+    const { 
+      value, 
+      onChange, 
+      onSubmit, 
+      children 
+    } = this.props;
+
   // do something
   return (
     <form onSubmit={onSubmit}>
@@ -178,12 +192,14 @@ const Search = ({ value, onChange, onSubmit, children }) => {
         type="text"
         value={value}
         onChange={onChange}
+        ref={el => this.input = el}
       />
       <button type="submit">
         {children}
       </button>
     </form>
-  );
+    );
+  }
 }
 
 Search.propTypes = {
