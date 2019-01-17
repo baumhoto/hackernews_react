@@ -1,7 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import renderer from 'react-test-renderer';
+import Enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import sinon from 'sinon';
 import App, { Search, Button, Table } from './App';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('App', () => {
 
@@ -46,12 +51,18 @@ describe('Button', () => {
   });
 
   test('has a valid snapshot', () => {
-  const component = renderer.create(
-    <Button>Give me More</Button>
-  );
-  const tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
+    const component = renderer.create(
+      <Button>Give me More</Button>
+    );
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 
+  it('onClick is called', () => {
+    const onButtonClick = sinon.spy();
+    const wrapper = shallow(<Button onClick={onButtonClick} />);
+    wrapper.find('button').simulate('click');
+    expect(onButtonClick.callCount).toBe(1);
   });
 });
 
@@ -77,4 +88,13 @@ describe('Table', () => {
     expect(tree).toMatchSnapshot();
 
   });
+
+  it('shows two items in list', () => {
+    const element = shallow(
+      <Table { ...props } />
+    );
+
+    expect(element.find('.table-row').length).toBe(2);
+  })
+
 });
