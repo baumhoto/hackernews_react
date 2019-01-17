@@ -31,7 +31,6 @@ exports[`App has a valid snapshot 1`] = `
     className="interactions"
   >
     <button
-      className=""
       onClick={[Function]}
       type="button"
     >
@@ -43,7 +42,7 @@ exports[`App has a valid snapshot 1`] = `
 
 exports[`Button has a valid snapshot 1`] = `
 <button
-  className=""
+  onClick={[Function]}
   type="button"
 >
   Give me More

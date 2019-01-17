@@ -45,14 +45,16 @@ describe('Search', () => {
 
 describe('Button', () => {
   it('renders without crashing', () => {
+    const dummy = () =>  {};
     const div = document.createElement('div');
-    ReactDOM.render(<Button>Give me More</Button>, div);
+    ReactDOM.render(<Button onClick={dummy}>Give me More</Button>, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 
   test('has a valid snapshot', () => {
+    const dummy = () => {};
     const component = renderer.create(
-      <Button>Give me More</Button>
+      <Button onClick={dummy}>Give me More</Button>
     );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
@@ -60,7 +62,7 @@ describe('Button', () => {
 
   it('onClick is called', () => {
     const onButtonClick = sinon.spy();
-    const wrapper = shallow(<Button onClick={onButtonClick} />);
+    const wrapper = shallow(<Button onClick={onButtonClick}>Test</Button>);
     wrapper.find('button').simulate('click');
     expect(onButtonClick.callCount).toBe(1);
   });
