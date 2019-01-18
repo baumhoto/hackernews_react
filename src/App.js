@@ -27,6 +27,11 @@ const smallColumn = {
 const Loading = () =>
   <div>Loading ...</div>
 
+const withLoading = (Component) => ({ isLoading, ...rest }) =>
+  isLoading
+    ? <Loading />
+    : <Component { ...rest } />
+
 class App extends Component {
   _isMounted = false;
 
@@ -103,11 +108,7 @@ class App extends Component {
     this.setState({ searchKey: searchTerm });
 
     if(this.needToSearchTopStories(searchTerm)) {
-      console.log('quering api')
       this.fetchSearchTopStories(searchTerm);
-    }
-    else {
-      console.log('use cache');
     }
 
     event.preventDefault();
@@ -169,14 +170,12 @@ class App extends Component {
           />
         }
         <div className="interactions">
-        { isLoading
-          ? <Loading />
-          : <Button 
-              onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
-            >
+          <ButtonWithLoading
+            isLoading={isLoading}
+            onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
+          >
             More  
-          </Button>
-        }
+          </ButtonWithLoading>
         </div>
       </div>
     );
@@ -249,6 +248,8 @@ Button.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node.isRequired,
 };
+
+const ButtonWithLoading = withLoading(Button);
 
 const Table = ({ list, onDismiss }) => {
     return (
