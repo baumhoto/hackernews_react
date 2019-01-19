@@ -32,6 +32,11 @@ const withLoading = (Component) => ({ isLoading, ...rest }) =>
     ? <Loading />
     : <Component { ...rest } />
 
+const withError = (Component) => ({ error, ...props }) =>
+  error
+    ? <div className="interactions"><p>Something went wrong. Please call 911.</p></div>
+    : <Component { ...props } />
+
 class App extends Component {
   _isMounted = false;
 
@@ -160,22 +165,19 @@ class App extends Component {
             Search
           </Search>
         </div>
-        { error 
-          ? <div className="interactions">
-              <p>Something went wrong.</p>
-            </div>
-           : <Table 
+        <TableWithConditionalRendering
+            isLoading={isLoading}
+            error={error}
             list={list}
             onDismiss={this.onDismiss}
-          />
-        }
+        />
         <div className="interactions">
-          <ButtonWithLoading
-            isLoading={isLoading}
+          <ButtonWithError
+            error={error}
             onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
           >
             More  
-          </ButtonWithLoading>
+          </ButtonWithError>
         </div>
       </div>
     );
@@ -249,7 +251,7 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const ButtonWithLoading = withLoading(Button);
+const ButtonWithError = withError(Button);
 
 const Table = ({ list, onDismiss }) => {
     return (
@@ -294,6 +296,9 @@ Table.propTypes = {
   ).isRequired,
   onDismiss: PropTypes.func.isRequired,
 };
+
+const TableWithConditionalRendering = withError(withLoading(Table))
+
 
 export default App;
 
